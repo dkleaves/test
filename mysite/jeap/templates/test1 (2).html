@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+    <form action="/new/" method="post">
+        {% csrf_token %}
+        <input name = "name">
+        <input name = "title">
+        <textarea name = "context"></textarea>
+        <input type="submit" value="提交" />
+    </form>
+    <ul>
+        {% for a in test_value %}
+            <li>{{a.title}}</li>
+            <a href="/delete/{{a.id}}">删除</a>
+            <a href="/edit/{{a.id}}">修改</a>
+        {% endfor%}
+    </ul>
+    <!--此处注意/homejson指向的链接没有html实现，是把链接交给URLs.py中指定的方法去渲染，然后返回json-->
+    <script>
+        $.getJSON("/homejson",function(data)
+    {
+//        console.log(data);
+        var items = [];
+        $.each(data,function(key,val){
+            var fields = val['fields'];
+            items.push("<li>"+fields['name']+"</li>")
+            items.push("<li>"+fields['title']+"</li>")
+            items.push("<li>"+fields['context']+"</li>")
+        });
+            $("#d").html(items.join(""));
+    });
+    </script>
+    <div id="d">adfadf</div>
+</body>
+</html>
